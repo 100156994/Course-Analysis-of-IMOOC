@@ -1,11 +1,14 @@
 import requests,re,bs4
 def deal(str1,str2):
-    url = "https://www.imooc.com/course/list"
+    url = "https://www.imooc.com"
     r=requests.get(url+str2)
     r.encoding="UTF-8"
     soup=bs4.BeautifulSoup(r.text,'lxml')
     pages=soup.find_all('div',class_='page')
-    m=len(pages[0].find_all('a'))
+    if len(pages)==0:
+        m=0
+    else:
+        m=len(pages[0].find_all('a'))
     cons=[]
     for k in range(1,m+2):
         re=requests.get(url+str2+"&page=%d" %(k))
@@ -30,12 +33,10 @@ def main():
     lb = []  # 方向+类别，结构：名称 链接'
     for index in range(len(li)):
         lb.append([li[index].text, li[index].a.get('href')])
-    text=[]
-    for i in range(1,9):
+    text=[]#用于存储所有的视频信息：结构为 课程名 类别 等级 人数 时长 分数 备注 链接
+    for i in range(8):
         text = text + deal(lb[i][0],lb[i][1])
-        print(text)
-    print('aaa')
+    print(text)
     return text
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
-
