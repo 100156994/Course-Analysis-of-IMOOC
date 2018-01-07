@@ -6,36 +6,10 @@ import re
 from matplotlib import pyplot
 import DBMssql
 import numpy as np
+import filter
 
 from pylab import *
 mpl.rcParams['font.sans-serif'] = ['SimHei']
-
-def is_outlier(points, threshold=15):
-    """
-    返回一个布尔型的数组，如果数据点是异常值返回True，反之，返回False。
-
-    数据点的值不在阈值范围内将被定义为异常值
-    阈值默认为15
-    """
-    # 转化为向量
-    if len(points.shape) == 1:
-        points = points[:,None]
-
-    # 数组的中位数
-    median = np.median(points, axis=0)
-
-    # 计算方差
-    diff = np.sum((points - median)**2, axis=-1)
-    #标准差
-    diff = np.sqrt(diff)
-    # 中位数绝对偏差
-    med_abs_deviation = np.median(diff)
-
-
-    modified_z_score = 0.6745 * diff / med_abs_deviation
-
-    # return a mask for each outlier
-    return modified_z_score > threshold
 
 
 #绘制直方图
@@ -70,7 +44,7 @@ def getAndDrawDur(ms):
     list = ms.ExecQuery(sql)
     result =durConversion(list)
     na = np.array(result)
-    filtered = na[~is_outlier(na,5)]
+    filtered = na[~filter.is_outlier(na,5)]
     drawDur(filtered,40,'课程时长','课程数目','课程时长直方统计表')
 
 def getAndDrawNum(ms):
@@ -80,7 +54,7 @@ def getAndDrawNum(ms):
     for it in list:
         result.append(it[0])
     na = np.array(result)
-    filtered = na[~is_outlier(na, 3.5)]
+    filtered = na[~filter.is_outlier(na, 3.5)]
     drawDur(filtered, 40, '学习人数', '课程数目', '课程人数直方统计表')
 
 def test():
