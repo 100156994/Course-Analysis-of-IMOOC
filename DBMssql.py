@@ -38,13 +38,13 @@ class MSSQL:
         else:
             return cur
 
-    def ExecQuery(self, sql):
+    def ExecQuery(self, sql,list=None):
         """
         执行查询语句
 
         """
         cur = self.__GetConnect()
-        cur.execute(sql)
+        cur.execute(sql,list)
         resList = cur.fetchall()
 
         # 查询完毕后必须关闭连接
