@@ -26,7 +26,7 @@ def drawPie(list,labels,title):
     #第一个参数为扇形的面积
     #labels参数为扇形的说明文字
     #autopct参数为扇形占比的显示格式
-    pyplot.pie([group.get(label, 0) for label in labels], labels=labels,)
+    pyplot.pie([group.get(label, 0) for label in labels], labels=labels,autopct='%.1f%%')
     pyplot.title(title)
     pyplot.show()
 
